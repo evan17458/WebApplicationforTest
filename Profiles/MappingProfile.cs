@@ -6,9 +6,11 @@ namespace WebApplicationforTest.Profiles
 {
     public class MappingProfile : Profile
     {
+       
         public MappingProfile()
         {
-            CreateMap<MonthlyRevenue, MonthlyRevenueDto>().ReverseMap();
+            CreateMap<MonthlyRevenueCreateDto, MonthlyRevenue>();
+            CreateMap<MonthlyRevenue, MonthlyRevenueDto>();
         }
     }
 }

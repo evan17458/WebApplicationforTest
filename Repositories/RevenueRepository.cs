@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
 using WebApplicationforTest.DTOs;
-
+using WebApplicationforTest.Models;
 
 namespace WebApplicationforTest.Repositories
 {
@@ -48,6 +48,33 @@ namespace WebApplicationforTest.Repositories
             }
 
             return list;
+        }
+
+        public async Task<bool> CreateAsync(MonthlyRevenue revenue)
+        {
+            using var connection = new SqlConnection(_connectionString);
+            await connection.OpenAsync();
+            using var cmd = new SqlCommand("sp_InsertMonthlyRevenue", connection)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+
+            cmd.Parameters.AddWithValue("@CompanyId", revenue.CompanyId ?? "");
+            cmd.Parameters.AddWithValue("@CompanyName", revenue.CompanyName ?? "");
+            cmd.Parameters.AddWithValue("@ReportYearMonth", revenue.ReportYearMonth ?? "");
+            cmd.Parameters.AddWithValue("@IndustryCategory", revenue.IndustryCategory ?? "");
+            cmd.Parameters.AddWithValue("@CurrentMonthRevenue", revenue.CurrentMonthRevenue);
+            cmd.Parameters.AddWithValue("@PreviousMonthRevenue", revenue.PreviousMonthRevenue);
+            cmd.Parameters.AddWithValue("@LastYearMonthRevenue", revenue.LastYearMonthRevenue);
+            cmd.Parameters.AddWithValue("@MoMChangePercent", revenue.MoMChangePercent);
+            cmd.Parameters.AddWithValue("@YoYChangePercent", revenue.YoYChangePercent);
+            cmd.Parameters.AddWithValue("@AccumulatedRevenue", revenue.AccumulatedRevenue);
+            cmd.Parameters.AddWithValue("@LastYearAccumulatedRevenue", revenue.LastYearAccumulatedRevenue);
+            cmd.Parameters.AddWithValue("@AccumulatedChangePercent", revenue.AccumulatedChangePercent);
+            cmd.Parameters.AddWithValue("@Note", revenue.Note ?? "");
+
+            var affected = await cmd.ExecuteNonQueryAsync();
+            return affected > 0;
         }
     }
 }
