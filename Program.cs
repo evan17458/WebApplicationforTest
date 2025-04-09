@@ -4,14 +4,38 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Text;
 using WebApplicationforTest.DTOs;
+using WebApplicationforTest.Profiles;
+using System.Reflection;
+
+using WebApplicationforTest.Repositories;
+using WebApplicationforTest.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllers();
+
+
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<GlobalExceptionFilter>();
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()     
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 
+builder.Services.AddScoped<IRevenueRepository, RevenueRepository>();
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.AddMediatR(cfg =>
+{
+    cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+});
 var app = builder.Build();
 
 // 執行 CSV 匯入邏輯
@@ -25,6 +49,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();

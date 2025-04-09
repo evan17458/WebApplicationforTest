@@ -16,6 +16,11 @@
     <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="9.0.4" />
     <PackageReference Include="System.Security.Permissions" Version="9.0.4" />
   </ItemGroup>
+	<ItemGroup>
+		<Content Include="t187ap05_L.csv">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
 
   <ItemGroup>
     <Folder Include="Commands\" />

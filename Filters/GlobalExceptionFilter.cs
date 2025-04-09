@@ -9,7 +9,7 @@ namespace WebApplicationforTest.Filters
         {
             var error = new
             {
-                Message = "🚨 發生未預期的錯誤",
+                Message = " 發生未預期的錯誤",
                 Detail = context.Exception.Message
             };
 
