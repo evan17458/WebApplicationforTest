@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
+using WebApplicationforTest.Enum;
 using WebApplicationforTest.Models;
 using WebApplicationforTest.Repositories;
-
 namespace WebApplicationforTest.Commands
 {
-    public class CreateMonthlyRevenueCommandHandler : IRequestHandler<CreateMonthlyRevenueCommand, bool>
+    public class CreateMonthlyRevenueCommandHandler : IRequestHandler<CreateMonthlyRevenueCommand, InsertResult>
     {
         private readonly IRevenueRepository _repository;
         private readonly IMapper _mapper;
@@ -16,10 +16,11 @@ namespace WebApplicationforTest.Commands
             _mapper = mapper;
         }
 
-        public async Task<bool> Handle(CreateMonthlyRevenueCommand request, CancellationToken cancellationToken)
+        public async Task<InsertResult> Handle(CreateMonthlyRevenueCommand request, CancellationToken cancellationToken)
         {
             var entity = _mapper.Map<MonthlyRevenue>(request.Dto);
-            return await _repository.CreateAsync(entity);
+            var result = await _repository.CreateAsync(entity);
+            return result;
         }
     }
 }

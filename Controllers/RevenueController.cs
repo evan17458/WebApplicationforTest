@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebApplicationforTest.Commands;
 using WebApplicationforTest.DTOs;
 using WebApplicationforTest.Queries.GetRevenueByCompanyId;
-
+using WebApplicationforTest.Enum;
 namespace WebApplicationforTest.Controllers
 {
     [ApiController]
@@ -27,8 +27,17 @@ namespace WebApplicationforTest.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] MonthlyRevenueCreateDto dto)
         {
+            // 執行指令，回傳 InsertResult
             var result = await _mediator.Send(new CreateMonthlyRevenueCommand(dto));
-            return result ? Ok() : StatusCode(500);
+
+            // 使用 switch 表達式處理結果
+            return result switch
+            {
+                InsertResult.Success => Ok(" 資料新增成功"),
+                InsertResult.AlreadyExists => Conflict("資料已存在"),
+                InsertResult.Error => StatusCode(500, " 系統錯誤"),
+                _ => StatusCode(500, " 未知錯誤")
+            };
         }
     }
 }

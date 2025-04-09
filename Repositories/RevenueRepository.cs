@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
 using WebApplicationforTest.DTOs;
+using WebApplicationforTest.Enum;
 using WebApplicationforTest.Models;
 
 namespace WebApplicationforTest.Repositories
@@ -50,31 +51,54 @@ namespace WebApplicationforTest.Repositories
             return list;
         }
 
-        public async Task<bool> CreateAsync(MonthlyRevenue revenue)
+        public async Task<InsertResult> CreateAsync(MonthlyRevenue revenue)
         {
-            using var connection = new SqlConnection(_connectionString);
-            await connection.OpenAsync();
-            using var cmd = new SqlCommand("sp_InsertMonthlyRevenue", connection)
+            try
             {
-                CommandType = CommandType.StoredProcedure
-            };
+                using var connection = new SqlConnection(_connectionString);
+                await connection.OpenAsync();
 
-            cmd.Parameters.AddWithValue("@CompanyId", revenue.CompanyId ?? "");
-            cmd.Parameters.AddWithValue("@CompanyName", revenue.CompanyName ?? "");
-            cmd.Parameters.AddWithValue("@ReportYearMonth", revenue.ReportYearMonth ?? "");
-            cmd.Parameters.AddWithValue("@IndustryCategory", revenue.IndustryCategory ?? "");
-            cmd.Parameters.AddWithValue("@CurrentMonthRevenue", revenue.CurrentMonthRevenue);
-            cmd.Parameters.AddWithValue("@PreviousMonthRevenue", revenue.PreviousMonthRevenue);
-            cmd.Parameters.AddWithValue("@LastYearMonthRevenue", revenue.LastYearMonthRevenue);
-            cmd.Parameters.AddWithValue("@MoMChangePercent", revenue.MoMChangePercent);
-            cmd.Parameters.AddWithValue("@YoYChangePercent", revenue.YoYChangePercent);
-            cmd.Parameters.AddWithValue("@AccumulatedRevenue", revenue.AccumulatedRevenue);
-            cmd.Parameters.AddWithValue("@LastYearAccumulatedRevenue", revenue.LastYearAccumulatedRevenue);
-            cmd.Parameters.AddWithValue("@AccumulatedChangePercent", revenue.AccumulatedChangePercent);
-            cmd.Parameters.AddWithValue("@Note", revenue.Note ?? "");
+                using var cmd = new SqlCommand("sp_InsertMonthlyRevenue", connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
 
-            var affected = await cmd.ExecuteNonQueryAsync();
-            return affected > 0;
+                cmd.Parameters.AddWithValue("@CompanyId", revenue.CompanyId ?? "");
+                cmd.Parameters.AddWithValue("@CompanyName", revenue.CompanyName ?? "");
+                cmd.Parameters.AddWithValue("@ReportYearMonth", revenue.ReportYearMonth ?? "");
+                cmd.Parameters.AddWithValue("@IndustryCategory", revenue.IndustryCategory ?? "");
+                cmd.Parameters.AddWithValue("@CurrentMonthRevenue", revenue.CurrentMonthRevenue ?? "");
+                cmd.Parameters.AddWithValue("@PreviousMonthRevenue", revenue.PreviousMonthRevenue ?? "");
+                cmd.Parameters.AddWithValue("@LastYearMonthRevenue", revenue.LastYearMonthRevenue ?? "");
+                cmd.Parameters.AddWithValue("@MoMChangePercent", revenue.MoMChangePercent ?? "");
+                cmd.Parameters.AddWithValue("@YoYChangePercent", revenue.YoYChangePercent ?? "");
+                cmd.Parameters.AddWithValue("@AccumulatedRevenue", revenue.AccumulatedRevenue ?? "");
+                cmd.Parameters.AddWithValue("@LastYearAccumulatedRevenue", revenue.LastYearAccumulatedRevenue ?? "");
+                cmd.Parameters.AddWithValue("@AccumulatedChangePercent", revenue.AccumulatedChangePercent ?? "");
+                cmd.Parameters.AddWithValue("@Note", revenue.Note ?? "");
+
+
+                var returnParam = cmd.Parameters.Add("@ReturnVal", SqlDbType.Int);
+                returnParam.Direction = ParameterDirection.ReturnValue;
+
+                await cmd.ExecuteNonQueryAsync();
+
+                var result = (int)returnParam.Value;
+
+                return result switch
+                {
+                    1 => InsertResult.Success,
+                    0 => InsertResult.AlreadyExists,
+                    _ => InsertResult.Error
+                };
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("❌ 錯誤：" + ex.Message);
+                return InsertResult.Error;
+            }
         }
+
+
     }
 }
