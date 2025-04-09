@@ -1,0 +1,64 @@
+## Build results
+bin/
+obj/
+
+## User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## OS generated files
+.DS_Store
+Thumbs.db
+
+## Rider / JetBrains
+.idea/
+
+## VS Code
+.vscode/
+
+## ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+## Logs
+*.log
+
+## NuGet
+*.nupkg
+*.snupkg
+packages/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+## Backup & temp files
+*.bak
+*.tmp
+*.temp
+~$*
+
+## Publish outputs
+publish/
+out/
+
+## Environment files
+.env
+*.env.local
+
+## Visual Studio working folder
+.vs/
+
+## Others
+*.db
+*.sqlite
+*.mdf
+*.ldf
+*.csv
+
+## Auto-generated Swagger files
+swagger/
+
+## npm / node_modules if using frontend
+node_modules/
