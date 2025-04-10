@@ -51,6 +51,75 @@ namespace WebApplicationforTest.Repositories
             return list;
         }
 
+        public async Task<(List<MonthlyRevenue>, int)> GetPagedAsync(int page, int pageSize)
+        {
+            var list = new List<MonthlyRevenue>();
+            int totalCount = 0;
+
+            // 安全轉型小工具方法
+            string? SafeToString(object? value)
+            {
+                if (value is null || value == DBNull.Value)
+                    return null;
+
+                return value.ToString();
+            }
+
+            using var connection = new SqlConnection(_connectionString);
+            using var command = new SqlCommand("sp_GetPagedMonthlyRevenue", connection)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+
+            command.Parameters.AddWithValue("@Page", page);
+            command.Parameters.AddWithValue("@PageSize", pageSize);
+
+            await connection.OpenAsync();
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            // 第一個結果集：分頁資料
+            while (await reader.ReadAsync())
+            {
+                list.Add(new MonthlyRevenue
+                {
+                    CompanyId = SafeToString(reader["CompanyId"]),
+                    CompanyName = SafeToString(reader["CompanyName"]),
+                    ReportYearMonth = SafeToString(reader["ReportYearMonth"]),
+                    IndustryCategory = SafeToString(reader["IndustryCategory"]),
+                    CurrentMonthRevenue = SafeToString(reader["CurrentMonthRevenue"]),
+                    PreviousMonthRevenue = SafeToString(reader["PreviousMonthRevenue"]),
+                    LastYearMonthRevenue = SafeToString(reader["LastYearMonthRevenue"]),
+                    MoMChangePercent = SafeToString(reader["MoMChangePercent"]),
+                    YoYChangePercent = SafeToString(reader["YoYChangePercent"]),
+                    AccumulatedRevenue = SafeToString(reader["AccumulatedRevenue"]),
+                    LastYearAccumulatedRevenue = SafeToString(reader["LastYearAccumulatedRevenue"]),
+                    AccumulatedChangePercent = SafeToString(reader["AccumulatedChangePercent"]),
+                    Note = SafeToString(reader["Note"]),
+
+                });
+            }
+
+            // 第二個結果集：總筆數
+            if (await reader.NextResultAsync() && await reader.ReadAsync())
+            {
+                totalCount = reader.GetInt32(0);
+            }
+
+            return (list, totalCount);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
         public async Task<InsertResult> CreateAsync(MonthlyRevenue revenue)
         {
             try

@@ -7,6 +7,11 @@ namespace WebApplicationforTest.Filters
     {
         public void OnException(ExceptionContext context)
         {
+
+            // 加這行：輸出例外資訊到 Console
+            Console.WriteLine($"❗例外錯誤：{context.Exception.Message}");
+            Console.WriteLine($"🔍 追蹤：{context.Exception.StackTrace}");
+
             var error = new
             {
                 Message = " 發生未預期的錯誤",

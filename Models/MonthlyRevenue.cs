@@ -2,7 +2,7 @@
 {
     public class MonthlyRevenue
     {
-        public string? ReportDate { get; set; }
+
         public string? ReportYearMonth { get; set; }
         public string? CompanyId { get; set; }
         public string? CompanyName { get; set; }

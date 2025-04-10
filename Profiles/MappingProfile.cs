@@ -11,6 +11,7 @@ namespace WebApplicationforTest.Profiles
         {
             CreateMap<MonthlyRevenueCreateDto, MonthlyRevenue>();
             CreateMap<MonthlyRevenue, MonthlyRevenueDto>();
+            CreateMap<MonthlyRevenue, MonthlyRevenuePagedDto>();
         }
     }
 }

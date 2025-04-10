@@ -8,5 +8,7 @@ namespace WebApplicationforTest.Repositories
     {
         Task<List<MonthlyRevenueDto>> GetByCompanyIdAsync(string companyId);
         Task<InsertResult> CreateAsync(MonthlyRevenue entity);
+
+        Task<(List<MonthlyRevenue>, int)> GetPagedAsync(int page, int pageSize);
     }
 }

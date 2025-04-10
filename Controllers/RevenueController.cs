@@ -4,6 +4,7 @@ using WebApplicationforTest.Commands;
 using WebApplicationforTest.DTOs;
 using WebApplicationforTest.Queries.GetRevenueByCompanyId;
 using WebApplicationforTest.Enum;
+using WebApplicationforTest.Queries.GetPagedMonthlyRevenue;
 namespace WebApplicationforTest.Controllers
 {
     [ApiController]
@@ -23,6 +24,15 @@ namespace WebApplicationforTest.Controllers
             var result = await _mediator.Send(new GetRevenueByCompanyIdQuery(companyId));
             return Ok(result);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetPaged([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        {
+            var query = new GetPagedMonthlyRevenueQuery { Page = page, PageSize = pageSize };
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] MonthlyRevenueCreateDto dto)
