@@ -64,7 +64,7 @@ namespace WebApplicationforTest.Repositories
                 using var connection = new SqlConnection(_connectionString);
                 await connection.OpenAsync();
 
-                var parameters = new DynamicParameters();
+                var parameters = new DynamicParameters();//這是 Dapper 提供的參數容器
 
                 parameters.Add("@CompanyId", revenue.CompanyId ?? "");
                 parameters.Add("@CompanyName", revenue.CompanyName ?? "");
