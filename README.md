@@ -58,54 +58,56 @@ ompanyRevenueDb
         └── 使用者定義的表格類型
             └── dbo.MonthlyRevenueType ←  就在這！
 
-📁 Commands                      // Command（寫入）邏輯
-├── 📁 CreateMonthlyRevenue     // 建立營收資料指令與處理器
-│   ├── CreateMonthlyRevenueCommand.cs
-│   └── CreateMonthlyRevenueCommandHandler.cs
+## 📁 專案目錄結構（含說明）
 
-📁 Controllers                  // API 控制器
-├── RevenueController.cs       // 提供對 MonthlyRevenue 的 API 接口
+- **Commands** // Command（寫入邏輯）
+  - CreateMonthlyRevenue // 建立營收資料指令與處理器
+    - CreateMonthlyRevenueCommand.cs
+    - CreateMonthlyRevenueCommandHandler.cs
 
-📁 DTOs                         // 資料傳輸物件 (Data Transfer Objects)
-├── MonthlyRevenueCreateDto.cs         // 建立營收資料用的輸入 DTO
-├── MonthlyRevenueDto.cs                // 查詢營收資料的輸出 DTO
-├── MonthlyRevenuePagedResultDto.cs    // 分頁查詢營收資料的結果 DTO
+- **Controllers** // API 控制器
+  - RevenueController.cs // 提供對 MonthlyRevenue 的 API 接口
 
-📁 Enum                         // 自訂列舉
-├── InsertResult.cs            // 插入資料的結果列舉定義
+- **DTOs** // 資料傳輸物件
+  - MonthlyRevenueCreateDto.cs // 建立營收資料的輸入 DTO
+  - MonthlyRevenueDto.cs // 查詢營收資料的輸出 DTO
+  - MonthlyRevenuePagedResultDto.cs // 分頁查詢營收資料的結果 DTO
 
-📁 Filters                      // 全域例外處理
-├── GlobalExceptionFilter.cs   // 全域例外過濾器
+- **Enum**
+  - InsertResult.cs // 插入資料的結果列舉定義
 
-📁 Helpers                      // 輔助工具
-├── CsvHelperExtensions.cs     // CSV 匯入輔助方法擴充
+- **Filters**
+  - GlobalExceptionFilter.cs // 全域例外過濾器
 
-📁 Models                       // 資料模型（Entity）
-├── MonthlyRevenue.cs          // 與資料庫對應的營收資料模型
+- **Helpers**
+  - CsvHelperExtensions.cs // CSV 匯入輔助方法擴充
 
-📁 Profiles                     // AutoMapper 設定
-├── MappingProfile.cs          // DTO <-> Model 映射設定
+- **Models**
+  - MonthlyRevenue.cs // 資料表對應的營收資料模型
 
-📁 Queries                      // Query（查詢）邏輯
-├── 📁 GetPagedMonthlyRevenue   // 分頁查詢營收資料
-│   ├── GetPagedMonthlyRevenueQuery.cs
-│   └── GetPagedMonthlyRevenueQueryHandler.cs
-├── 📁 GetRevenueByCompanyId    // 根據公司代碼查詢營收資料
-│   ├── GetRevenueByCompanyIdQuery.cs
-│   └── GetRevenueByCompanyIdHandler.cs
+- **Profiles**
+  - MappingProfile.cs // DTO <-> Model 映射設定
 
-📁 Repositories                 // 資料存取層（Repository）
-├── IRevenueRepository.cs      // 資料存取介面
-├── RevenueRepository.cs       // 資料存取實作（使用 Dapper 呼叫 SP）
+- **Queries** // 查詢邏輯
+  - GetPagedMonthlyRevenue
+    - GetPagedMonthlyRevenueQuery.cs
+    - GetPagedMonthlyRevenueQueryHandler.cs
+  - GetRevenueByCompanyId
+    - GetRevenueByCompanyIdQuery.cs
+    - GetRevenueByCompanyIdHandler.cs
 
-📁 SqlScripts                   // SQL 腳本（匯入 DB 使用）
-├── BulkInsertMonthlyRevenue.sql     // 批次匯入預存程序
-├── GetMonthlyRevenue.sql            // 查詢預存程序
-├── GetPagedMonthlyRevenue.sql       // 分頁查詢預存程序
-├── InsertMonthlyRevenue.sql         // 單筆新增預存程序
-├── MonthlyRevenueType.sql           // 使用者定義資料表類型（TVP）
+- **Repositories**
+  - IRevenueRepository.cs
+  - RevenueRepository.cs // 資料存取實作（使用 Dapper 呼叫 SP）
 
-📄 .gitattributes
-📄 .gitignore
-📄 appsettings.json            // 應用程式設定檔
-📄 Program.cs                  // 應用程式進入點
+- **SqlScripts**
+  - BulkInsertMonthlyRevenue.sql // 批次匯入預存程序
+  - GetMonthlyRevenue.sql // 查詢預存程序
+  - GetPagedMonthlyRevenue.sql // 分頁查詢預存程序
+  - InsertMonthlyRevenue.sql // 單筆新增預存程序
+  - MonthlyRevenueType.sql // 使用者定義資料表類型（TVP）
+
+- .gitattributes
+- .gitignore
+- appsettings.json // 應用程式設定檔
+- Program.cs // 應用程式進入點
